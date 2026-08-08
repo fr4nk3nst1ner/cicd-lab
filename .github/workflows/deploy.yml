@@ -1,0 +1,38 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build site
+        run: |
+          test -f index.html
+          echo "Build OK"
+
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::483216332057:role/github-actions-deploy
+          aws-region: us-east-1
+      - name: Load release config
+        run: |
+          VERSION=$(aws ssm get-parameter --name /cicd-lab/config/release --query 'Parameter.Value' --output text)
+          echo "Deploying release $VERSION"
