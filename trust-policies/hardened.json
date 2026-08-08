@@ -1,0 +1,19 @@
+{
+  "Comment": "DEPLOYED. Subject pinned to main of this repo. Only a push to main, which needs write access, can assume the role. Fork PRs and same-repo PRs do not match.",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::768242378223:oidc-provider/token.actions.githubusercontent.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+          "token.actions.githubusercontent.com:sub": "repo:fr4nk3nst1ner/cicd-lab:ref:refs/heads/main"
+        }
+      }
+    }
+  ]
+}
