@@ -1,10 +1,16 @@
 name: oidc-pivot
 
+# Runs on main (succeeds) and on pull requests (denied by the pinned trust policy).
+# The PR failure at the credentials step is the intended lesson: proper sub scoping
+# stops a poisoned pre-merge run from reaching AWS.
+
 on:
   push:
     branches: [main]
   pull_request:
 
+# id-token: write is required to request an OIDC token. GitHub refuses to grant it
+# to workflows from forked pull requests, which is the first line of defense.
 permissions:
   id-token: write
   contents: read
@@ -13,18 +19,6 @@ jobs:
   pivot:
     runs-on: ubuntu-latest
     steps:
-      - name: Show OIDC claims (sub/aud only, not secrets)
-        run: |
-          IDTOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" \
-            | python3 -c 'import sys,json;print(json.load(sys.stdin)["value"])')
-          echo "$IDTOKEN" | python3 -c '
-          import sys,base64,json
-          t=sys.stdin.read().strip().split(".")[1]; t+="="*(-len(t)%4)
-          d=json.loads(base64.urlsafe_b64decode(t))
-          print("SUB="+str(d.get("sub")))
-          print("AUD="+str(d.get("aud")))'
-
       - name: Assume AWS role via GitHub OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:

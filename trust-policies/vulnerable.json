@@ -1,5 +1,5 @@
 {
-  "Comment": "DO NOT DEPLOY outside a throwaway account. The wildcard subject matches any branch and any pull request in this repo, so a poisoned pre-merge run would assume the role. Shown here only to contrast with hardened.json.",
+  "Comment": "Do not deploy outside a throwaway account. The wildcard subject matches any branch and any pull request in this repo, so a poisoned pre-merge run could assume the role. Kept here only to contrast with hardened.json.",
   "Version": "2012-10-17",
   "Statement": [
     {
@@ -13,7 +13,7 @@
           "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
         },
         "StringLike": {
-          "token.actions.githubusercontent.com:sub": "repo:fr4nk3nst1ner/cicd-lab:*"
+          "token.actions.githubusercontent.com:sub": "repo:fr4nk3nst1ner@28953657/cicd-lab@1328186569:*"
         }
       }
     }

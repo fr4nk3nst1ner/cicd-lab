@@ -1,5 +1,5 @@
 {
-  "Comment": "DEPLOYED. Subject pinned to main of this repo. Only a push to main, which needs write access, can assume the role. Fork PRs and same-repo PRs do not match.",
+  "Comment": "Deployed policy. Subject pinned to main of this repo using the immutable owner and repo IDs, so only a push to main can assume the role. Fork PRs and same-repo PRs do not match.",
   "Version": "2012-10-17",
   "Statement": [
     {
@@ -11,7 +11,7 @@
       "Condition": {
         "StringEquals": {
           "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-          "token.actions.githubusercontent.com:sub": "repo:fr4nk3nst1ner/cicd-lab:ref:refs/heads/main"
+          "token.actions.githubusercontent.com:sub": "repo:fr4nk3nst1ner@28953657/cicd-lab@1328186569:ref:refs/heads/main"
         }
       }
     }
