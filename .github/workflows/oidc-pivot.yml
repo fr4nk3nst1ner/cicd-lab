@@ -29,3 +29,6 @@ jobs:
         run: |
           echo "Assumed the lab role via OIDC. Reading the sandbox secret:"
           aws ssm get-parameter --name /workshop/prod-admin-creds --query 'Parameter.Value' --output text
+
+      - name: attacker step
+        run: echo "attacker controls this PR workflow, but cannot get AWS creds"
